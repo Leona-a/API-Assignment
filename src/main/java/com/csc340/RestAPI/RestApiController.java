@@ -24,56 +24,27 @@ public class RestApiController {
     }
 
     /**
-     * Get a random quote from quotable and make it available at this endpoint.
+     * Get a random joke from official-joke-api.appspot.com
+     * and make it available at this endpoint.
      *
      * @return
      */
-    @GetMapping("/quote")
-    public Object getQuote() {
-        String url = "https://api.quotable.io/random";
+    @GetMapping("/joke")
+    public Object getJoke() {
+        String url = "https://official-joke-api.appspot.com/random_joke";
         RestTemplate restTemplate = new RestTemplate();
-        Object jSonQuote = restTemplate.getForObject(url, Object.class);
+        Object jSonJoke = restTemplate.getForObject(url, Object.class);
 
         //Print the whole response to console.
-        String quote = restTemplate.getForObject(url, String.class);
+        String joke = restTemplate.getForObject(url, String.class);
         //Parse out the most important info from the response.
-        JSONObject jo = new JSONObject(quote);
+        JSONObject jo = new JSONObject(joke);
         System.out.println(jo.toString());
-        String quoteAuthor = jo.getString("author");
-        String quoteContent = jo.getString("content");
-        System.out.println(quoteAuthor);
-        System.out.println(quoteContent);
+        String jokeSetup = jo.getString("setup");
+        String jokePunchline = jo.getString("punchline");
+        System.out.println(jokeSetup);
+        System.out.println(jokePunchline);
 
-        return jSonQuote;
+        return jSonJoke;
     }
-
-    /**
-     * Get a list of universities from hipolabs and parse the most important
-     * info to console.
-     *
-     * @return
-     */
-    @GetMapping("/universities")
-    public List<Object> getUniversities() {
-        String url = "http://universities.hipolabs.com/search?name=sports";
-        RestTemplate restTemplate = new RestTemplate();
-        Object[] universities = restTemplate.getForObject(url, Object[].class);
-
-        //Print the whole response to console
-        JSONArray ja = new JSONArray(universities);
-        System.out.println(ja.toString());
-
-        //Parse out relevant info from each entry in the response
-        Iterator<Object> iter = ja.iterator();
-        while (iter.hasNext()) {
-            JSONObject jo = (JSONObject) iter.next();
-            String name = jo.getString("name");
-            String country = jo.getString("country");
-            System.out.println(name + " : " + country);
-
-        }
-
-        return Arrays.asList(universities);
-    }
-
 }
